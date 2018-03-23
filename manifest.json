@@ -1,0 +1,24 @@
+{
+  "manifest_version": 2,
+  "name": "Télécharger mes relevés Bforbank",
+  "version": "1.0",
+  "description": "Permets le téléchargement d'un fichier CSV des relevés de comptes Bforbank.",
+  "page_action": {
+    "default_title": "Télécharger mes relevés Bforbank",
+    "default_icon": "bforbank.png"
+  },
+  "background": {
+    "scripts": ["main.js"],
+    "persistant" : false
+  },
+  "content_scripts": [
+    {
+      "matches": ["https://client.bforbank.com/espace-client/consultation/operations/*", "https://client.bforbank.com/espace-client/livret/consultation/*"],
+      "js": ["jquery-2.min.js", "data_to_csv.js", "add_button.js"]
+    }
+  ],
+  "permissions": [
+      "activeTab",
+      "declarativeContent"
+  ]
+}
