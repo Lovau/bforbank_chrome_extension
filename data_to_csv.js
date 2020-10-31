@@ -1,4 +1,13 @@
 
+
+function dynamicSortByDate(property) {
+
+    return function (a,b) {
+        // return b[property].localeCompare(a[property]);
+        return a[property].localeCompare(b[property]);
+    }
+}
+
 /**
  * Convert an HTML table into javascript array 
  * 
@@ -67,13 +76,11 @@ function getTableInJSON(table, isLivret) {
             data[data.length-1][1] = formatMontant(data[data.length-1][3]);
             data[data.length-1].pop();
         }
-        // if (index == 1) {
-        //     console.log(data);
-        //     exit;
-        // }
     });
 
+    data_new_format.sort(dynamicSortByDate("0"));
     console.log(data_new_format);
+
     return data_new_format;
 }
 
