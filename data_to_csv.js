@@ -16,6 +16,7 @@ function getTableInJSON(table, isLivret) {
     // console.log(trs);
 
     var data = [];
+    var data_new_format = [];
     var countTR = 0;
     var date = 0;
 
@@ -35,9 +36,11 @@ function getTableInJSON(table, isLivret) {
         if (index == 0) {
             return;
         }
+
         // Get Date
         if (tr[0].indexOf("Opérations du") !== -1) {
             date = $('<div>' + tr[0] + '</div>').text().trim().replace(/Opérations du /, '');
+            date = date.substr(6,4) + "/" + date.substr(3,2) + "/" + date.substr(0,2);
         }
 
         // console.log(tr);
@@ -50,6 +53,13 @@ function getTableInJSON(table, isLivret) {
             data[data.length-1][1] = formatMontant(data[data.length-1][1]);
             data[data.length-1][3] = $(data[data.length-1][2]).text().replace(/[^a-zA-Z0-9éèêç/\s]+/gi, '').trim();
             data[data.length-1][2] = date;
+
+            // new format
+            data_new_format[data.length-1] = [];
+            data_new_format[data.length-1][0] = data[data.length-1][2];
+            data_new_format[data.length-1][1] = data[data.length-1][1];
+            data_new_format[data.length-1][2] = data[data.length-1][0];
+
         } else if (data.length > 0 && countTR != 0 && isLivret) {
             countTR=0;
             data[data.length-1][0] += " / " + formatLabel(tr[0]);
@@ -57,10 +67,14 @@ function getTableInJSON(table, isLivret) {
             data[data.length-1][1] = formatMontant(data[data.length-1][3]);
             data[data.length-1].pop();
         }
+        // if (index == 1) {
+        //     console.log(data);
+        //     exit;
+        // }
     });
 
-    // console.log(data);
-    return data;
+    console.log(data_new_format);
+    return data_new_format;
 }
 
 /**
@@ -142,10 +156,11 @@ function startCSVDownload() {
     var csv = convertToCSV(data);
     // console.log(csv);
 
-    var headers = ['libelle', 'montant', 'date'];
-    if (!isLivret) {
-        headers.push('categorie');
-    }
+    // var headers = ['libelle', 'montant', 'date'];
+    var headers = ['date', 'montant', 'libelle'];
+    // if (!isLivret) {
+    //     headers.push('categorie');
+    // }
 
     var today = new Date();
     var filename = isLivret ? 'releves_livret_' : 'releves_compte_';
