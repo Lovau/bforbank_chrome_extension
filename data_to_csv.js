@@ -30,7 +30,9 @@ function getTableInJSON(table, isLivret) {
     var date = 0;
 
     var formatLabel = function(label) {
-        return $(label.trim()).text().trim().replace(/\s+/g,' ');
+        var result = $(label.trim()).text().trim().replace(/\s+/g,' ');
+        // console.log(result);
+        return result.replace(/(<([^>]+)>)/gi, "");
     };
     var formatMontant = function(montant) {
         montant = montant.replace(/&nbsp;€/, '');
@@ -38,6 +40,7 @@ function getTableInJSON(table, isLivret) {
         if (numberOfCommas == 2) {
             montant = montant.replace(",", "");
         }
+        montant = montant.replace(",", ".");
         return montant;
     };
 
@@ -52,13 +55,18 @@ function getTableInJSON(table, isLivret) {
             date = date.substr(6,4) + "/" + date.substr(3,2) + "/" + date.substr(0,2);
         }
 
-        // console.log(tr);
         if (tr.length > 1) {
             data.push(tr);
+        // console.log(tr);
             countTR++;
         } else if (data.length > 0 && countTR != 0 && !isLivret) {
             countTR=0;
-            data[data.length-1][0] += " / " + formatLabel(tr[0]);
+            console.log(data[data.length-1][0]);
+            console.log(formatLabel(data[data.length-1][0]));
+            console.log("aaa");
+            // data[data.length-1][0] = formatLabel(tr[0]);
+            data[data.length-1][0] = formatLabel(data[data.length-1][0]) + " / " + formatLabel(tr[0]);
+            // data[data.length-1][0] += " / " + formatLabel(tr[0]);
             data[data.length-1][1] = formatMontant(data[data.length-1][1]);
             data[data.length-1][3] = $(data[data.length-1][2]).text().replace(/[^a-zA-Z0-9éèêç/\s]+/gi, '').trim();
             data[data.length-1][2] = date;
