@@ -40,7 +40,7 @@ function getTableInJSON(table, isLivret) {
         if (numberOfCommas == 2) {
             montant = montant.replace(",", "");
         }
-        montant = montant.replace(",", ".");
+        //montant = montant.replace(",", ".");
         return montant;
     };
 
